@@ -1,0 +1,17 @@
+pre {
+    border-radius: 5px;
+    border: 1px solid #BCBEC0;
+    background: #F1F3F5;
+    padding: 10px;
+    font: 12px Monaco, Consolas, "Andale  Mono", "DejaVu Sans Mono", monospace
+}
+
+#stats {
+    border-radius: 5px;
+    border: 1px solid #BCBEC0;
+    background: #F1F3F5;
+    width: fit-content;
+    padding: 10px;
+    align-content: end;
+    font: 12px Monaco, Consolas, "Andale  Mono", "DejaVu Sans Mono", monospace
+}

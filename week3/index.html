@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Assignment 3</h2>
+    <div id="stats"></div>
+    <ul id="gradesList"></ul>
+    <script src="script.js"></script>
+    <script>
+        let nameToGrade = getNameToGradeMapping();
+        let ul = document.getElementById("gradesList");
+        for (let [name, grade] of nameToGrade) {
+            let li = document.createElement('li');
+            let pre = document.createElement('pre');
+            pre.appendChild(document.createTextNode(`${name[0].toUpperCase()}${name.slice(1)} - ${grade}`));
+            li.appendChild(pre);
+            ul.appendChild(li);
+        }
+
+        let stats = document.getElementById("stats");
+        let div = document.createElement('div');
+        div.appendChild(document.createTextNode(`Total Number of Students: ${nameToGrade.size}`));
+        stats.prepend(div);
+
+        div = document.createElement('div');
+        div.appendChild(document.createTextNode(`Average Score: ${getAverage(getGradesList())}`));
+        stats.prepend(div);
+
+        div = document.createElement('div');
+        div.appendChild(document.createTextNode(`Highest Score: ${Math.max(...getGradesList())}`));
+        stats.prepend(div);
+
+        div = document.createElement('div');
+        div.appendChild(document.createTextNode(`Lowest Score: ${Math.min(...getGradesList())}`));
+        stats.prepend(div);
+    </script>
+</body>
+
+</html>
