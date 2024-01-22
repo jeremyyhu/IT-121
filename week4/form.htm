@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+</head>
+<body>
+
+<h1>Functions & validation</h1>
+
+<form id="form1" action="#" onsubmit="return validateForm(this);">
+  first name: <input type="text" name="firstname"><br>
+  last name: <input type="text" name="lastname"><br>
+  password: <input type="text" name="password"><br>
+
+  <button >Check</button>
+</form>
+
+<hr><div id="message"></div>
+
+<script>
+
+// add validatePassword function here
+const validatePassword = (password) => {
+  // Validates password is at least 8 characters
+  if (password.length < 8) {
+    $("#message").html("Password must be at least 8 characters.")
+    return false;
+  }
+  // Validates password contains at least one uppercase and one lowercase character
+  let upper = false;
+  let lower = false;
+  for (const c of password) {
+    // Maybe kinda hacky way of testing if character is [a-ZA-Z] without regex
+    if (c.toLowerCase() != c.toUpperCase()) {
+      upper = upper || c.toUpperCase() === c;
+      lower = lower || c.toLowerCase() === c;
+      if (upper && lower) {
+        return true;
+      }
+    }
+  }
+  // Your validation can stop and show the failure message when the first invalid condition is met
+  if (!upper) {
+    $("#message").html("Password must contain at least 1 upper case character.")
+  } else if (!lower) {
+    $("#message").html("Password must contain at least 1 lower case character.")
+  }
+  return false;
+}
+
+const validateForm = (myForm) => {
+
+  var firstname = myForm.firstname.value.trim(); // get text of firstname field
+  var lastname = myForm.lastname.value.trim(); // get text of lastname field
+  var password = myForm.password.value.trim(); // get text of password field
+
+  /* Form validation code goes here
+  */
+  if (!firstname || !firstname.length) {
+    // update 'message' DIV with appropriate wording
+    $("#message").html("Firstname cannot be blank.");
+  } else if (!lastname || !lastname.length) {
+    // update 'message' DIV with appropriate wording
+    $("#message").html("Lastname cannot be blank.");
+  }  else if (validatePassword(password)) {
+    // update 'message' DIV with appropriate wording
+    $("#message").html("Valid input entered.");
+  }
+  return false; // Prevent page reload
+}
+
+</script>
+
+</body>
+</html>
