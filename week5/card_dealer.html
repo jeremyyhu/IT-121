@@ -13,12 +13,88 @@
 
 <script>
 
+const suits = ['Hearts', 'Diamonds', 'Spades', 'Clubs'];
+const cardsPerSuit = 13;
+const totalCards = suits.length * cardsPerSuit;
+const defaultHandSize = 5;
+const usedCards = new Set();
+
+class Card {
+  constructor(suit, value) {
+    this.suit = suit;
+    this.value = value;
+  }
+}
+
+const createDeck = () => {
+  const deck = [];
+  for (let i = 0; i < suits.length; i++) {
+    for (let j = 0; j < cardsPerSuit; j++) {
+      deck.push(new Card(suits[i], j + 1));
+    }
+  }
+  return deck;
+}
+
+const selectCards = (numCards) => {
+  let indexes = [];
+  for (let i = 0; i < numCards; i++) {
+    let index = Math.floor(Math.random() * totalCards);
+    while (usedCards.has(index)) {
+      index = Math.floor(Math.random() * totalCards);
+    }
+    usedCards.add(index);
+    indexes.push(index);
+  }
+  return indexes;
+}
+
+const getCardName = (card) => {
+  switch (card['value']) {
+    case 1:
+      return `Ace of ${card['suit']}`
+    case 11:
+      return `Jack of ${card['suit']}`
+    case 12:
+      return `Queen of ${card['suit']}`
+    case 13:
+      return `King of ${card['suit']}`
+    default:
+      return `${card['value']} of ${card['suit']}`;
+  }
+}
+
+const calculateHandSize = () => {
+  if (usedCards.size === defaultHandSize * Math.floor(totalCards / defaultHandSize)) {
+    if (totalCards % defaultHandSize === 0) {
+      usedCards.clear();
+      return defaultHandSize;
+    }
+    return totalCards % defaultHandSize;
+  } else {
+    return defaultHandSize;
+  }
+}
+
 const dealHand = () => {
 
   /* code to deal a card hand goes here */
+  const deck = createDeck();
+  const handSize = calculateHandSize();
+  const indexes = selectCards(handSize);
+  // reset hand between deals
+  let displayString = "";
+  for (let i = 0; i < handSize; i++) {
+    displayString = `${displayString}<li>${getCardName(deck[indexes[i]])}</li>\n`;
+  }
+
+  // reset list of used cards after all cards have been dealt
+  if (handSize !== defaultHandSize) {
+    usedCards.clear();
+  }
 
   // update 'card_hand' DIV with appropriate information
-  $("#card_hand").html("Button clicked");
+  $("#card_hand").html(displayString);
 
   return false; // prevent page reload
 }
