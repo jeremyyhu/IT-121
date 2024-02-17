@@ -47,18 +47,61 @@
         {name:"Severus Snape", role:"staff", house:"Slytherin",gender:"m",alignment:"?"}
         ];
 
-        $(document).ready(function(){
+        // set visible rows to alternating background color
+        function setBackgroundColor() {
+            ($("tr:visible:even:gt(0)").css("background-color", "#FFBE98"));
+            ($("tr:visible:odd").css("background-color", "#91a8d0"));
+        }
 
-        /*
-        - add a button for each 'house' value
-        - add table row for each character
-        - set visible rows to alternating background color
-            
-        - add click handler to show only rows matching selected 'house'. Enable buttons to call this handler. 
-        
-        - add click handler to reset table 
-        */
+        // reset button click handler
+        function reset() {
+            ($("tr").show());
+            setBackgroundColor();
+        }
 
+        // get list of headers from html
+        function getHeaders() {
+            let ths = $("th");
+            let headers = [];
+            for (let i = 0; i < ths.length; i++) {
+                headers.push(ths[i].textContent);
+            }
+            return headers;
+        }
+
+        // add click handler to show only rows matching selected 'house'. Enable buttons to call this handler.
+        function filterHouse() {
+            let house = event.target.innerHTML;
+            ($("tr:gt(0)").hide());
+            ($("tr:gt(0)").filter(`:contains(${house})`).show());
+            setBackgroundColor();
+        }
+
+        $(document).ready(function() {
+            // add click handler to reset table
+            ($("button").click(reset));
+
+            let houses = new Set();
+            let headers = getHeaders();
+            let table = $("tbody");
+            // add table row for each character
+            for (let i = 0; i < characters.length; i++) {
+                let character = characters[i];
+                let tr = $("<tr>");
+                for (const header in headers) {
+                    tr.append($(`<th>${character[headers[header]]}</th>`));
+                    // Generate 'house' buttons programmatically, based on the JavaScript data set
+                    if (headers[header] === "house" && character[headers[header]]) {
+                        houses.add(character[headers[header]]);
+                    }
+                }
+                table.append(tr);
+            }
+            // add a button for each 'house' value
+            for (const house of houses.values()) {
+                $("#buttons").append($(`<button onclick="filterHouse()">${house}</button>`));
+            }
+            setBackgroundColor();
         });
 
         </script>
