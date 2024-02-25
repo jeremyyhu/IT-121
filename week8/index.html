@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous">
+    </script>
+</head>
+<body>
+    <form id="myform">
+        <label for="q">City name:</label>
+        <input type='text' id="q" name="q" form="myform" >
+        <button>Submit</button>
+    </form>
+
+    <table border='1' cellpadding = '1'>
+        <tr>
+            <th>date</th>
+            <th>min_temp</th>
+            <th>max_temp</th>
+            <th>humidity</th>
+            <th>description</th>
+            <th>icon</th>
+        </tr>
+    </table>
+    <script src="script.js"></script>
+    <script>
+        $(document).ready(() => {
+            ($("table").hide());
+            $('form button').on('click', (e) => {
+                ($("tr:gt(0)").remove());
+                ($("table").hide());
+                //cancel the default form submission
+                e.preventDefault();
+                // validate form data
+                if (!validateInput($("#q")[0].value)) {
+                    alert("blank or numeric city entries not accepted")
+                    return;
+                }
+                //gather up all form-field values
+                let formData = $('#myform').serialize();
+                //send the request
+                $.get(`${endpoint}${formData},us&appid=${apiKey}`, result => {
+                    ($("table").show());
+                    processResponse(result);
+                }).fail(err => {
+                    alert(`${err.responseJSON.message}\nnote that search is limited to US cities`);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
